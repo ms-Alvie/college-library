@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    color: black;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+h1.welcoming-text {
+    text-align: center;
+}
+
+h1.book-list {
+    text-align: center;
+}
+
+h2.add-book {
+    text-align: center;
+}
+
+/* Login Form */
+form {
+    background: #ffffff;
+    padding: 3rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    max-width: 400px;
+    margin: 80px auto;
+    transition: box-shadow 0.3s ease;
+}
+
+form:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+form h2 {
+    text-align: left;
+    font-size: 28px;
+    color: #111827;
+    margin-bottom: 24px;
+    font-weight: 600;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 12px 0;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #f9fafb;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #2563eb;
+    background-color: #fff;
+    outline: none;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: green;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: darkgreen;
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Admin Dashboard Header */
+h1 {
+    font-size: 32px;
+    color: #111827;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background-color: lightgray;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 500px;
+}
+
+nav a {
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: gray;
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    form {
+        padding: 2rem;
+        margin: 40px 20px;
+    }
+
+    nav a {
+        text-align: center;
+    }
+}
