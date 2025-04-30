@@ -1,0 +1,163 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    color: black;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Blurred background image */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/college-library/assets/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    filter: blur(1px);
+    z-index: -1; /* Push behind everything */
+}
+
+/* Optional: overlay to darken it slightly */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.3); /* Light blur overlay */
+    z-index: -1;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Login Form */
+form {
+    background: #ffffff;
+    padding: 3rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    max-width: 400px;
+    margin: 80px auto;
+    transition: box-shadow 0.3s ease;
+}
+
+form:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+form h2 {
+    text-align: center;
+    font-size: 28px;
+    color: #111827;
+    margin-bottom: 24px;
+    font-weight: 600;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 12px 0;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #f9fafb;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #2563eb;
+    background-color: #fff;
+    outline: none;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #1d4ed8;
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Admin Dashboard Header */
+h1 {
+    font-size: 32px;
+    text-align: center;
+    color: #111827;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background-color: rgb(60, 60, 246);
+    padding: 16px;
+    border-radius: 10px;
+    margin: 40px auto;
+    max-width: 500px;
+}
+
+nav a {
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: rgb(50, 50, 216);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    form {
+        padding: 2rem;
+        margin: 40px 20px;
+    }
+
+    nav a {
+        text-align: center;
+    }
+}
