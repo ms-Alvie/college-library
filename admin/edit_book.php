@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         body {
             margin: 0;
             font-family: 'Crimson Text', serif;
-            background: url('../assets/library-bg.jpg') no-repeat center center fixed;
+            background: url('../assets/bg.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #3e2c23;
             display: flex;

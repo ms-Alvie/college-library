@@ -1,40 +1,50 @@
 <?php
+session_start();
 include '../config/db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = md5($_POST['password']);
+    $fullname = trim($_POST['fullname']);
+    $id_number = trim($_POST['id_number']);
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+    $role = "student";
 
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-        if ($password === $user['password']) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['role'] = $user['role'];
-            $_SESSION['fullName'] = $user['fullname'];
-            header("Location: ../" . $user['role'] . "/dashboard.php");
-            exit();
-        } else {
-            $error = "Invalid password.";
-        }
+    // Validate
+    if (empty($fullname) || empty($id_number) || empty($username) || empty($password)) {
+        $error = "All fields are required.";
     } else {
-        $error = "Invalid username.";
-    }
+        // Check if username or id_number exists
+        $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR id_number = ?");
+        $stmt->bind_param("ss", $username, $id_number);
+        $stmt->execute();
+        $stmt->store_result();
 
-    $stmt->close();
+        if ($stmt->num_rows > 0) {
+            $error = "Username or ID number already exists.";
+        } else {
+            // Hash password
+            $hashedPassword = md5($password); 
+
+            // Insert user
+            $stmt = $conn->prepare("INSERT INTO users (username, password, role, fullname, id_number) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssss", $username, $hashedPassword, $role, $fullname, $id_number);
+
+            if ($stmt->execute()) {
+                $success = "Student registered successfully. You can now <a href='login.php'>login</a>.";
+            } else {
+                $error = "Registration failed. Please try again.";
+            }
+        }
+
+        $stmt->close();
+    }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
-    <link rel="stylesheet" href="../assets/style.css">
+    <title>Student Register</title>
+    <link rel="stylesheet" href="assets/style.css">
     <style>
         body {
             margin: 0;
@@ -109,7 +119,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <form method="post" class="login-box">
-        <h2>Login</h2>
+        <h2>Student Registration</h2>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="fullname" required>
+        </div>
+        <div class="form-group">
+            <label>ID Number</label>
+            <input type="text" name="id_number" required>
+        </div>
         <div class="form-group">
             <label>Username</label>
             <input type="text" name="username" required>
@@ -118,13 +136,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label>Password</label>
             <input type="password" name="password" required>
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
+
         <?php if (!empty($error)): ?>
             <div class="error-message"><?= $error ?></div>
+        <?php elseif (!empty($success)): ?>
+            <div class="success-message"><?= $success ?></div>
         <?php endif; ?>
-        <div style="text-align:center; margin-top:15px; color: blue; text-decoration: none;">
-         Don't have an account? <a href=" ../auth/register.php">Register here</a>
-    </div>
     </form>
 </body>
 </html>

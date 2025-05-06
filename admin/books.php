@@ -23,7 +23,7 @@ $books = $conn->query("SELECT * FROM books ORDER BY id DESC");
             padding: 0;
             
             font-family: 'Crimson Text', serif;
-            background: url('../assets/library-bg.jpg') no-repeat center center fixed;
+            background: url('../assets/bg.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #3e2c23;
             display: flex;
@@ -119,14 +119,23 @@ $books = $conn->query("SELECT * FROM books ORDER BY id DESC");
         }
 
         .actions a {
-            color: #2563eb;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            color:rgb(255, 255, 255);
             text-decoration: none;
             margin-right: 8px;
             font-weight: 500;
         }
 
         .actions a:hover {
-            text-decoration: underline;
+            background-color: #1e40af;
+            text-decoration: none;
         }
 
         .top-links {
@@ -135,14 +144,23 @@ $books = $conn->query("SELECT * FROM books ORDER BY id DESC");
         }
 
         .top-links a {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
             margin: 0 10px;
-            color: #2563eb;
+            color:rgb(255, 255, 255);
             font-weight: 600;
             text-decoration: none;
         }
 
         .top-links a:hover {
-            text-decoration: underline;
+            background-color: #1e40af;
+            text-decoration: none;
         }
         
         @media (max-width: 768px) {
@@ -187,7 +205,7 @@ $books = $conn->query("SELECT * FROM books ORDER BY id DESC");
             <h1>Manage Books</h1>
 
             <div class="top-links">
-                <a href="add_book.php">➕ Add New Book</a> | 
+                <a href="add_book.php"> Add New Book</a> | 
             </div>
 
             <table class="book-table">

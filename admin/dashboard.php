@@ -18,7 +18,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
         body {
             margin: 0;
             font-family: 'Crimson Text', serif;
-            background: url('../assets/library-bg.jpg') no-repeat center center fixed;
+            background: url('../assets/bg.jpg') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
             display: flex;

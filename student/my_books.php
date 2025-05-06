@@ -21,7 +21,7 @@ $user_id = $_SESSION['user_id'];
         body {
             margin: 0;
             font-family: 'Crimson Text', serif;
-            background: url('../assets/library-bg.jpg') no-repeat center center fixed;
+            background: url('../assets/bg.jpg') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
             display: flex;

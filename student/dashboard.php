@@ -1,12 +1,13 @@
 <?php 
 include '../config/db.php';
 
+session_start();
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'student') {
     header("Location: ../auth/login.php");
     exit();
 }
 
-$username = $_SESSION['username'];
+$fullname = $_SESSION['fullName']; 
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +21,7 @@ $username = $_SESSION['username'];
         body {
             margin: 0;
             font-family: 'Crimson Text', serif;
-            background: url('../assets/library-bg.jpg') no-repeat center center fixed;
+            background: url('../assets/bg.jpg') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
             display: flex;
@@ -153,7 +154,7 @@ $username = $_SESSION['username'];
     <!-- Main Content -->
     <div class="main-content">
         <div class="welcome-box">
-            <h1>Welcome, <?= htmlspecialchars($username) ?>!</h1>
+        <h1>Welcome, <?= htmlspecialchars($fullname) ?>!</h1>
             <nav>
                 <a href="my_books.php">📘 My Borrowed Books</a>
                 <a href="../auth/logout.php">🚪 Logout</a>
