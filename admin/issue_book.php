@@ -2,20 +2,36 @@
 session_start();
 include '../config/db.php';
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') 
+{
     header("Location: ../auth/login.php");
     exit();
 }
 
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') 
+{
     $book_id = $_POST['book_id'];
     $student_id = $_POST['student_id'];
     $issue_date = date('Y-m-d');
     $return_date = date('Y-m-d', strtotime("+7 days"));
 
-    $conn->query("INSERT INTO issued_books (user_id, book_id, issue_date, return_date) 
-                  VALUES ($student_id, $book_id, '$issue_date', '$return_date')");
+    $conn->query("INSERT INTO `issued_books` 
+                  (
+                    `user_id`, 
+                    `book_id`, 
+                    `issue_date`, 
+                    `return_date`
+                  ) 
+                  VALUES 
+                  (
+                    $student_id, 
+                    $book_id, 
+                    '$issue_date', 
+                    '$return_date'
+                  )
+    ");
+
     $conn->query("UPDATE books SET available = 0 WHERE id = $book_id");
     header("Location: dashboard.php");
     exit();
