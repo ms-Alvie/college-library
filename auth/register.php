@@ -2,147 +2,152 @@
 session_start();
 include '../config/db.php';
 
+// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fullname = trim($_POST['fullname']);
-    $id_number = trim($_POST['id_number']);
-    $username = trim($_POST['username']);
-    $password = $_POST['password'];
-    $role = "student";
+    $username = $conn->real_escape_string($_POST['username']);
+    $email = $conn->real_escape_string($_POST['email']);
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-    // Validate
-    if (empty($fullname) || empty($id_number) || empty($username) || empty($password)) {
-        $error = "All fields are required.";
+    // Check if the username or email already exists
+    $check_query = $conn->query("SELECT * FROM users WHERE username='$username' OR email='$email'");
+    if ($check_query->num_rows > 0) {
+        echo "<script>alert('Username or email already exists.');</script>";
     } else {
-        // Check if username or id_number exists
-        $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR id_number = ?");
-        $stmt->bind_param("ss", $username, $id_number);
-        $stmt->execute();
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) {
-            $error = "Username or ID number already exists.";
-        } else {
-            // Hash password
-            $hashedPassword = md5($password); 
-
-            // Insert user
-            $stmt = $conn->prepare("INSERT INTO users (username, password, role, fullname, id_number) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssss", $username, $hashedPassword, $role, $fullname, $id_number);
-
-            if ($stmt->execute()) {
-                $success = "Student registered successfully. You can now <a href='login.php'>login</a>.";
-            } else {
-                $error = "Registration failed. Please try again.";
-            }
-        }
-
-        $stmt->close();
+        // Insert new user into the database
+        $conn->query("INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$password', 'student')");
+        header("Location: ../auth/login.php");
+        exit();
     }
 }
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Student Register</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
     <style>
-        body {
+        /* General Reset */
+        * {
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
             background: url('../assets/bg.jpg') no-repeat center center fixed;
             background-size: cover;
+            color: #3e2c23;
             display: flex;
+            height: 100vh;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
-        .login-box {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
+        .form-container {
+            background: rgba(255, 255, 255, 0.8);
             padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 400px;
             text-align: center;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
         }
 
-        .login-box h2 {
-            margin-bottom: 24px;
-            font-size: 24px;
-            color: #1e3a8a;
+        .form-container h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #5a3e2b;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .form-container label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #5a3e2b;
+            margin-bottom: 8px;
+            display: block;
             text-align: left;
         }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        input[type="text"], input[type="password"] {
+        .form-container input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        button {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            padding: 12px 20px;
+            margin-bottom: 16px;
+            border: 2px solid #d4c2b4;
             border-radius: 8px;
             font-size: 16px;
+            color: #5a3e2b;
+        }
+
+        .form-container button {
+            padding: 12px 24px;
+            background-color: #8b5e3c;
+            color: #fff;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s;
             width: 100%;
         }
 
-        button:hover {
-            background-color: #1e40af;
+        .form-container button:hover {
+            background-color: #70422d;
         }
 
-        .error-message {
-            color: red;
-            margin-top: 15px;
-            font-size: 14px;
+        .login-link {
+            display: block;
+            margin-top: 20px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            .form-container h2 {
+                font-size: 28px;
+            }
+
+            .form-container input {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <form method="post" class="login-box">
-        <h2>Student Registration</h2>
-        <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" name="fullname" required>
-        </div>
-        <div class="form-group">
-            <label>ID Number</label>
-            <input type="text" name="id_number" required>
-        </div>
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" required>
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" required>
-        </div>
-        <button type="submit">Register</button>
 
-        <?php if (!empty($error)): ?>
-            <div class="error-message"><?= $error ?></div>
-        <?php elseif (!empty($success)): ?>
-            <div class="success-message"><?= $success ?></div>
-        <?php endif; ?>
-    </form>
+    <!-- Main Content -->
+    <div class="form-container">
+        <h2>Create Account</h2>
+
+        <form method="POST">
+            <label>Username:</label>
+            <input type="text" name="username" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" required>
+
+            <label>Password:</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <!-- Already Have an Account Link -->
+        <a href="../auth/login.php" class="login-link">Already have an account? Login here</a>
+    </div>
+
 </body>
 </html>
